@@ -1,0 +1,34 @@
+server:
+  port: 8943
+
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+          min-partition-count: 2
+      instance-count: 2
+      instance-index: 0
+      bindings:
+        outputChannel:
+          binder: binderKafkaA
+          destination: inputTopic
+          producer:
+            partition-key-expression: payload
+            partition-count: 4
+        inputChannel:
+          binder: binderKafkaA
+          destination: inputTopic
+          group: groupA
+          consumer:
+            partitioned: true
+      binders:
+        binderKafkaA:
+          type: kafka
+          environment:
+            spring:
+              kafka:
+                bootstrap-servers: 127.0.0.1:9092
+      default-binder: binderKafkaA
+
