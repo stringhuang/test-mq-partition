@@ -17,7 +17,13 @@ public class ReceiverService {
     private String port;
 
     @StreamListener(InboundChannel.INBOUND_CHANNEL_NAME)
-    public void receiveMsg(Message<String> msg) {
-        log.info("ReceiverClass in Instance {}  has received message: {}", this.port, msg.getPayload());
+    public void receiveMsg(Message<String> msg) throws Exception {
+        long sleepSeconds = Double.valueOf(Math.random() * 10000).longValue();
+        try {
+            Thread.sleep(sleepSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("ReceiverClass in Instance {}  has received message: {}, and sleep {} millis", port, msg.getPayload(), sleepSeconds);
     }
 }
